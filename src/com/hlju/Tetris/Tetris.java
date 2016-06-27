@@ -34,48 +34,102 @@ public class Tetris extends JPanel {
 
 	// 7种形状
 	static final boolean[][][] Shape = {
-			// I
+			/*
+			 * oooooo
+			 */
 			{ 
-				{ false, false, false, false }, 
-				{ true, true, true, true }, 
-				{ false, false, false, false },
-				{ false, false, false, false }
+				{ false, false, false, false, false, false }, 
+				{ false, false, false, false, false, false }, 
+				{ true, true, true, true, true, true }, 
+				{ false, false, false, false, false, false }, 
+				{ false, false, false, false, false, false }, 
+				{ false, false, false, false, false, false }
 			},
-			// J
+			/*
+			 * ooo
+			 * ooo
+			 */
 			{ 
-				{ true, false, false },
+				{ true, true, true },
 				{ true, true, true }, 
 				{ false, false, false } 
 			},
-			// L
+			/*
+			 * ooo
+			 *   o
+			 *   o
+			 *   o
+			 */
 			{ 
-				{ false, false, true }, 
-				{ true, true, true }, 
-				{ false, false, false }
+				{ true, true, true , false }, 
+				{ false, false, true, false }, 
+				{ false, false, true, false }, 
+				{ false, false, true, false }
 			},
-			// O
+			/*
+			 * ooo
+			 * o
+			 * o
+			 * o
+			 */
 			{ 
-				{ true, true }, 
-				{ true, true } 
+				{ false, true, true , true }, 
+				{ false, true, false, false }, 
+				{ false, true, false, false }, 
+				{ false, true, false, false }
 			},
-			// S
+			/*
+			 *  o
+			 *  o
+			 * oo
+			 * o
+			 * o
+			 */
 			{ 
-				{ false, true, true }, 
-				{ true, true, false }, 
-				{ false, false, false } 
+				{ false, false, true, false, false }, 
+				{ false, false, true, false, false }, 
+				{ false, true, true, false, false }, 
+				{ false, true, false, false, false },
+				{ false, true, false, false, false }
 			},
-			// T
+			/*
+			 * o
+			 * o
+			 * oo
+			 *  o
+			 *  o
+			 */
 			{ 
-				{ false, true, false }, 
-				{ true, true, true }, 
-				{ false, false, false } 
+				{ false, true, false, false, false }, 
+				{ false, true, false, false, false }, 
+				{ false, true, true, false, false }, 
+				{ false, false, true, false, false },
+				{ false, false, true, false, false }
 			},
-			// Z
+			/*
+			 * ooo
+			 *  o
+			 *  o
+			 *  o
+			 */
 			{ 
-				{ true, true, false }, 
-				{ false, true, true }, 
-				{ false, false, false } 
-			} };
+				{ false, true, true , true }, 
+				{ false, false, true, false }, 
+				{ false, false, true, false }, 
+				{ false, false, true, false }
+			},
+			/*
+			 * ooooo
+			 *   o
+			 */
+			{ 
+				{ false, false, false, false, false }, 
+				{ true, true, true, true, true }, 
+				{ false, false, true, false, false }, 
+				{ false, false, true, false, false },
+				{ false, false, false, false, false }
+			}
+			};
 
 	// 下落方块的位置,左上角坐标
 	private Point NowBlockPos;
@@ -202,7 +256,8 @@ public class Tetris extends JPanel {
 	 * 随机生成新方块状态
 	 */
 	private int CreateNewBlockState() {
-		return (int) (Math.random() * 1000) % 28;
+		int Sum = Tetris.Shape.length * 4;
+		return (int) (Math.random() * 1000) % Sum;
 	}
 
 	private boolean[][] getBlockMap(int BlockState) {
