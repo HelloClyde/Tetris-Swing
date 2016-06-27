@@ -33,103 +33,7 @@ public class Tetris extends JPanel {
 	private boolean IsPause = false;
 
 	// 7种形状
-	static final boolean[][][] Shape = {
-			/*
-			 * oooooo
-			 */
-			{ 
-				{ false, false, false, false, false, false }, 
-				{ false, false, false, false, false, false }, 
-				{ true, true, true, true, true, true }, 
-				{ false, false, false, false, false, false }, 
-				{ false, false, false, false, false, false }, 
-				{ false, false, false, false, false, false }
-			},
-			/*
-			 * ooo
-			 * ooo
-			 */
-			{ 
-				{ true, true, true },
-				{ true, true, true }, 
-				{ false, false, false } 
-			},
-			/*
-			 * ooo
-			 *   o
-			 *   o
-			 *   o
-			 */
-			{ 
-				{ true, true, true , false }, 
-				{ false, false, true, false }, 
-				{ false, false, true, false }, 
-				{ false, false, true, false }
-			},
-			/*
-			 * ooo
-			 * o
-			 * o
-			 * o
-			 */
-			{ 
-				{ false, true, true , true }, 
-				{ false, true, false, false }, 
-				{ false, true, false, false }, 
-				{ false, true, false, false }
-			},
-			/*
-			 *  o
-			 *  o
-			 * oo
-			 * o
-			 * o
-			 */
-			{ 
-				{ false, false, true, false, false }, 
-				{ false, false, true, false, false }, 
-				{ false, true, true, false, false }, 
-				{ false, true, false, false, false },
-				{ false, true, false, false, false }
-			},
-			/*
-			 * o
-			 * o
-			 * oo
-			 *  o
-			 *  o
-			 */
-			{ 
-				{ false, true, false, false, false }, 
-				{ false, true, false, false, false }, 
-				{ false, true, true, false, false }, 
-				{ false, false, true, false, false },
-				{ false, false, true, false, false }
-			},
-			/*
-			 * ooo
-			 *  o
-			 *  o
-			 *  o
-			 */
-			{ 
-				{ false, true, true , true }, 
-				{ false, false, true, false }, 
-				{ false, false, true, false }, 
-				{ false, false, true, false }
-			},
-			/*
-			 * ooooo
-			 *   o
-			 */
-			{ 
-				{ false, false, false, false, false }, 
-				{ true, true, true, true, true }, 
-				{ false, false, true, false, false }, 
-				{ false, false, true, false, false },
-				{ false, false, false, false, false }
-			}
-			};
+	static boolean[][][] Shape = BlockV4.Shape;
 
 	// 下落方块的位置,左上角坐标
 	private Point NowBlockPos;
@@ -153,6 +57,17 @@ public class Tetris extends JPanel {
 		timer = new Timer(Tetris.TimeDelay, this.TimerListener);
 		timer.start();
 		this.addKeyListener(this.KeyListener);
+	}
+	
+	public void SetMode(String mode){
+		if (mode.equals("v6")){
+			Tetris.Shape = BlockV6.Shape;
+		}
+		else{
+			Tetris.Shape = BlockV4.Shape;
+		}
+		this.Initial();
+		this.repaint();
 	}
 
 	/**
@@ -239,6 +154,7 @@ public class Tetris extends JPanel {
 		this.NextBlockMap = this.getBlockMap(this.NextBlockState);
 		// 计算方块位置
 		this.NowBlockPos = this.CalNewBlockInitPos();
+		this.repaint();
 	}
 	
 	public void SetPause(boolean value){
