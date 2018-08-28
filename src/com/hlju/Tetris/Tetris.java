@@ -180,10 +180,12 @@ public class Tetris extends JPanel {
 		int Shape = BlockState / 4;
 		int Arc = BlockState % 4;
 		System.out.println(BlockState + "," + Shape + "," + Arc);
-		return this.RotateBlock(Tetris.Shape[Shape], Math.PI / 2 * Arc);
+		return this.RotateBlock(Tetris.Shape[Shape], Arc);
 	}
 
 	/**
+	 * 原算法
+	 * 
 	 * 旋转方块Map，使用极坐标变换,注意源矩阵不会被改变
 	 * 使用round解决double转换到int精度丢失导致结果不正确的问题
 	 * 
@@ -192,7 +194,7 @@ public class Tetris extends JPanel {
 	 * @param angel
 	 *            rad角度，应该为pi/2的倍数
 	 * @return 转换完成后的矩阵引用
-	 */
+	 
 	private boolean[][] RotateBlock(boolean[][] BlockMap, double angel) {
 		// 获取矩阵宽高
 		int Heigth = BlockMap.length;
@@ -210,16 +212,48 @@ public class Tetris extends JPanel {
 				float RelativeY = i - CenterY;
 				float ResultX = (float) (Math.cos(angel) * RelativeX - Math.sin(angel) * RelativeY);
 				float ResultY = (float) (Math.cos(angel) * RelativeY + Math.sin(angel) * RelativeX);
-				/* 调试信息
-				System.out.println("RelativeX:" + RelativeX + "RelativeY:" + RelativeY);
-				System.out.println("ResultX:" + ResultX + "ResultY:" + ResultY);
-				*/
+				// 调试信息
+				//System.out.println("RelativeX:" + RelativeX + "RelativeY:" + RelativeY);
+				//System.out.println("ResultX:" + ResultX + "ResultY:" + ResultY);
+				
 				//将结果坐标还原
 				Point OrginPoint = new Point(Math.round(CenterX + ResultX), Math.round(CenterY + ResultY));
 				ResultBlockMap[OrginPoint.y][OrginPoint.x] = BlockMap[i][j];
 			}
 		}
 		return ResultBlockMap;
+	}
+	**/
+	
+	/**
+	 * 
+	 * @param shape 7种图形之一
+	 * @param time 旋转次数
+	 * @return
+	 * 
+	 * https://blog.csdn.net/janchin/article/details/6310654  翻转矩阵
+	 */
+	
+	private boolean[][] RotateBlock(boolean[][] shape, int time) {
+		if(time == 0) {
+			return shape;
+		}
+		int heigth = shape.length;
+		int width = shape[0].length;
+		boolean[][] ResultMap = new boolean[heigth][width];
+		int tmpH = heigth - 1, tmpW = 0;
+		for(int i = 0; i < heigth && tmpW < width; i++) {
+			for(int j = 0; j < width && tmpH > -1; j++) {
+				ResultMap[i][j] = shape[tmpH][tmpW];
+				tmpH--;
+			}
+			tmpH = heigth - 1;
+			tmpW++;
+		}
+		for(int i = 1; i < time; i++) {
+			ResultMap = RotateBlock(ResultMap, 0);
+		}
+		return ResultMap;
 	}
 
 	/**
@@ -238,7 +272,7 @@ public class Tetris extends JPanel {
 		*/
 		
 		Tetris tetris = new Tetris();
-		boolean[][] result = tetris.RotateBlock(SrcMap, Math.PI / 2 * 3);
+		boolean[][] result = tetris.RotateBlock(SrcMap, 1);
 		Tetris.ShowMap(result);
 		
 	}
@@ -379,7 +413,7 @@ public class Tetris extends JPanel {
 					}
 					break;
 				case KeyEvent.VK_UP:
-					boolean[][] TurnBlock = Tetris.this.RotateBlock(Tetris.this.NowBlockMap,Math.PI / 2);
+					boolean[][] TurnBlock = Tetris.this.RotateBlock(Tetris.this.NowBlockMap,1);
 					if (!Tetris.this.IsTouch(TurnBlock, Tetris.this.NowBlockPos)){
 						Tetris.this.NowBlockMap = TurnBlock;
 					}
